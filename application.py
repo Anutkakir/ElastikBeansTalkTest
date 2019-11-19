@@ -1,15 +1,12 @@
 import logging
 import logging.handlers
 
-from wsgiref.simple_server import make_server
-
-
 # Create logger
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 # Handler 
-LOG_FILE = '/opt/python/log/sample-app.log'
+LOG_FILE = '/var/log/uwsgi/sample-app.log' # /var/log/uwsgi is the default log path for Docker preconfigured python containers
 handler = logging.handlers.RotatingFileHandler(LOG_FILE, maxBytes=1048576, backupCount=5)
 handler.setLevel(logging.INFO)
 
@@ -117,15 +114,16 @@ welcome = """
   <div class="linksColumn"> 
     <h2>What's Next?</h2>
     <ul>
-    <li><a href="http://docs.amazonwebservices.com/elasticbeanstalk/latest/dg/">AWS Elastic Beanstalk overview</a></li>
-    <li><a href="http://docs.amazonwebservices.com/elasticbeanstalk/latest/dg/index.html?concepts.html">AWS Elastic Beanstalk concepts</a></li>
-    <li><a href="http://docs.amazonwebservices.com/elasticbeanstalk/latest/dg/create_deploy_Python_django.html">Deploy a Django Application to AWS Elastic Beanstalk</a></li>
-    <li><a href="http://docs.amazonwebservices.com/elasticbeanstalk/latest/dg/create_deploy_Python_flask.html">Deploy a Flask Application to AWS Elastic Beanstalk</a></li>
-    <li><a href="http://docs.amazonwebservices.com/elasticbeanstalk/latest/dg/create_deploy_Python_custom_container.html">Customizing and Configuring a Python Container</a></li>
-    <li><a href="http://docs.amazonwebservices.com/elasticbeanstalk/latest/dg/using-features.loggingS3.title.html">Working with Logs</a></li>
-	<li><a href="http://ec2-52-72-2-76.compute-1.amazonaws.com:8080/job/Deployment/">Jenkins Job to redeploy via AWS ElastivBeansTalk</a></li>
-	<li><a href="https://github.com/Anutkakir/ElastikBeansTalkTest">GitHub Repo</a></li>
-
+      <li><a href="http://aws.amazon.com/elasticbeanstalk/ug/">Learn how to build, deploy and manage your own applications using AWS Elastic Beanstalk</a></li>
+      <li><a href="http://aws.amazon.com/elasticbeanstalk/concepts/">AWS Elastic Beanstalk concepts</a></li>
+      <li><a href="http://aws.amazon.com/elasticbeanstalk/deployment/">Learn how to create new application versions</a></li>
+      <li><a href="http://aws.amazon.com/elasticbeanstalk/environments/">Learn how to manage your application environments</a></li>
+	  <li><a href="http://ec2-52-72-2-76.compute-1.amazonaws.com:8080/job/Deployment/">Jenkins Job to redeploy via AWS ElastivBeansTalk</a></li>
+	  <li><a href="https://github.com/Anutkakir/ElastikBeansTalkTest">GitHub Repo</a></li>
+    </ul>
+    <h2>Python 3 Samples</h2>
+    <ul>
+      <li><a href="https://github.com/awslabs/eb-py-flask-signup/tree/python3">A sample application using Flask and Bootstrap</a></li>
     </ul>
   </div>
 </body>
@@ -139,7 +137,7 @@ def application(environ, start_response):
         try:
             if path == '/':
                 request_body_size = int(environ['CONTENT_LENGTH'])
-                request_body = environ['wsgi.input'].read(request_body_size).decode()
+                request_body = environ['wsgi.input'].read(request_body_size)
                 logger.info("Received message: %s" % request_body)
             elif path == '/scheduled':
                 logger.info("Received task %s scheduled at %s", environ['HTTP_X_AWS_SQSD_TASKNAME'], environ['HTTP_X_AWS_SQSD_SCHEDULED_AT'])
@@ -152,10 +150,4 @@ def application(environ, start_response):
     headers = [('Content-type', 'text/html')]
 
     start_response(status, headers)
-    return [response]
-
-
-if __name__ == '__main__':
-    httpd = make_server('', 8000, application)
-    print("Serving on port 8000...")
-    httpd.serve_forever()
+    return [response.encode('utf-8')]
