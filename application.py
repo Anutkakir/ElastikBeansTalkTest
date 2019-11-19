@@ -123,7 +123,7 @@ welcome = """
     <li><a href="http://docs.amazonwebservices.com/elasticbeanstalk/latest/dg/create_deploy_Python_flask.html">Deploy a Flask Application to AWS Elastic Beanstalk</a></li>
     <li><a href="http://docs.amazonwebservices.com/elasticbeanstalk/latest/dg/create_deploy_Python_custom_container.html">Customizing and Configuring a Python Container</a></li>
     <li><a href="http://docs.amazonwebservices.com/elasticbeanstalk/latest/dg/using-features.loggingS3.title.html">Working with Logs</a></li>
-	<li><a href="http://ec2-54-145-44-145.compute-1.amazonaws.com:8080/job/Deployment/">Jenkins Job</a></li>
+	<li><a href="http://ec2-52-72-2-76.compute-1.amazonaws.com:8080/job/Deployment/">Jenkins Job to redeploy via AWS ElastivBeansTalk</a></li>
 	<li><a href="https://github.com/Anutkakir/ElastikBeansTalkTest">GitHub Repo</a></li>
 
     </ul>
